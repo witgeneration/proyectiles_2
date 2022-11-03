@@ -3,6 +3,10 @@ namespace SpriteKind {
     export const piedra = SpriteKind.create()
     export const suelo = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.manzana, SpriteKind.suelo, function (sprite, otherSprite) {
+    sprite.destroy(effects.disintegrate, 500)
+    info.changeLifeBy(-1)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.piedra, function (sprite, otherSprite) {
     sprite.destroy()
     game.over(false)
@@ -11,8 +15,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.manzana, function (sprite, other
     otherSprite.destroy()
     info.changeScoreBy(1)
 })
-let piedra: Sprite = null
 let manzana: Sprite = null
+let piedra: Sprite = null
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -176,31 +180,7 @@ suelo.setPosition(80, 120)
 info.setScore(0)
 info.setLife(3)
 let tiempo = 3500
-forever(function () {
-    manzana = sprites.createProjectileFromSide(img`
-        . . . . . . . e c 7 . . . . . . 
-        . . . . e e e c 7 7 e e . . . . 
-        . . c e e e e c 7 e 2 2 e e . . 
-        . c e e e e e c 6 e e 2 2 2 e . 
-        . c e e e 2 e c c 2 4 5 4 2 e . 
-        c e e e 2 2 2 2 2 2 4 5 5 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 4 4 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 4 2 e 
-        . e e e 2 2 2 2 2 2 2 2 2 4 e . 
-        . 2 e e 2 2 2 2 2 2 2 2 4 2 e . 
-        . . 2 e e 2 2 2 2 2 4 4 2 e . . 
-        . . . 2 2 e e 4 4 4 2 e e . . . 
-        . . . . . 2 2 e e e e . . . . . 
-        `, 0, 30)
-    avion.sayText(tiempo)
-    manzana.setScale(0.5, ScaleAnchor.Middle)
-    manzana.setKind(SpriteKind.manzana)
-    manzana.setPosition(randint(0, 160), 0)
-    pause(tiempo)
-})
+let velocidad = 30
 forever(function () {
     piedra = sprites.createProjectileFromSide(img`
         . . . . . . . . . c c 8 . . . . 
@@ -219,14 +199,36 @@ forever(function () {
         . . . c c b b b 6 6 a c c c c . 
         . . . . c c a b b c c c . . . . 
         . . . . . c c c c c c . . . . . 
-        `, 0, 30)
+        `, 0, velocidad)
     piedra.setScale(0.5, ScaleAnchor.Middle)
     piedra.setKind(SpriteKind.piedra)
     piedra.setPosition(randint(0, 160), 0)
-    pause(tiempo * 5)
+    pause(5000)
+})
+forever(function () {
+    manzana = sprites.createProjectileFromSide(img`
+        . . . . . . . e c 7 . . . . . . 
+        . . . . e e e c 7 7 e e . . . . 
+        . . c e e e e c 7 e 2 2 e e . . 
+        . c e e e e e c 6 e e 2 2 2 e . 
+        . c e e e 2 e c c 2 4 5 4 2 e . 
+        c e e e 2 2 2 2 2 2 4 5 5 2 2 e 
+        c e e 2 2 2 2 2 2 2 2 4 4 2 2 e 
+        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
+        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
+        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
+        c e e 2 2 2 2 2 2 2 2 2 2 4 2 e 
+        . e e e 2 2 2 2 2 2 2 2 2 4 e . 
+        . 2 e e 2 2 2 2 2 2 2 2 4 2 e . 
+        . . 2 e e 2 2 2 2 2 4 4 2 e . . 
+        . . . 2 2 e e 4 4 4 2 e e . . . 
+        . . . . . 2 2 e e e e . . . . . 
+        `, 0, velocidad)
+    manzana.setScale(0.5, ScaleAnchor.Middle)
+    manzana.setKind(SpriteKind.manzana)
+    manzana.setPosition(randint(0, 160), 0)
+    pause(1000)
 })
 game.onUpdateInterval(10000, function () {
-    if (tiempo >= 500) {
-        tiempo += -500
-    }
+    velocidad += 10
 })
