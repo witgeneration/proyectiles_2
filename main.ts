@@ -3,6 +3,10 @@ namespace SpriteKind {
     export const piedra = SpriteKind.create()
     export const suelo = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.manzana, SpriteKind.suelo, function (sprite, otherSprite) {
+    sprite.destroy(effects.disintegrate, 500)
+    info.changeLifeBy(-1)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.piedra, function (sprite, otherSprite) {
     sprite.destroy()
     game.over(false)
@@ -226,7 +230,7 @@ forever(function () {
     pause(tiempo * 5)
 })
 game.onUpdateInterval(10000, function () {
-    if (tiempo >= 500) {
+    if (tiempo >= 1000) {
         tiempo += -500
     }
 })
