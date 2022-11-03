@@ -175,8 +175,8 @@ let suelo = sprites.create(img`
 suelo.setPosition(80, 120)
 info.setScore(0)
 info.setLife(3)
-let tiempo = 5000
-game.onUpdateInterval(tiempo, function () {
+let tiempo = 3500
+forever(function () {
     manzana = sprites.createProjectileFromSide(img`
         . . . . . . . e c 7 . . . . . . 
         . . . . e e e c 7 7 e e . . . . 
@@ -199,8 +199,9 @@ game.onUpdateInterval(tiempo, function () {
     manzana.setScale(0.5, ScaleAnchor.Middle)
     manzana.setKind(SpriteKind.manzana)
     manzana.setPosition(randint(0, 160), 0)
+    pause(tiempo)
 })
-game.onUpdateInterval(tiempo * 5, function () {
+forever(function () {
     piedra = sprites.createProjectileFromSide(img`
         . . . . . . . . . c c 8 . . . . 
         . . . . . . 8 c c c f 8 c c . . 
@@ -222,9 +223,10 @@ game.onUpdateInterval(tiempo * 5, function () {
     piedra.setScale(0.5, ScaleAnchor.Middle)
     piedra.setKind(SpriteKind.piedra)
     piedra.setPosition(randint(0, 160), 0)
+    pause(tiempo * 5)
 })
 game.onUpdateInterval(10000, function () {
-    if (tiempo >= 1000) {
-        tiempo += -1000
+    if (tiempo >= 500) {
+        tiempo += -500
     }
 })
